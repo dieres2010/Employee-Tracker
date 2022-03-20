@@ -162,6 +162,19 @@ const showEmplDep = () => {
     });
 };
 
+// Display utilized budget by Department
+
+const showBudget = () => {
+    let sql = `SELECT d.id AS Departmen_id, d.name AS Department_name, SUM(r.salary) AS budget FROM employee AS e LEFT JOIN role as r ON e.role_id = r.id LEFT JOIN department AS d  ON r.department_id = d.id  WHERE e.role_id IS NOT NULL GROUP BY 1, 2 ORDER BY 3 DESC;`;
+  
+    db.query(sql, (err, res) => {
+      if (err) throw err;
+      console.table("");
+      console.table(res);
+      trackEmpl();
+    });
+};
+
 // Display all Employees Ordered by Manager
 
 const showEmplMgr = () => {
@@ -313,6 +326,7 @@ function trackEmpl() {
             "View Employees by Manager",
             "View Employees by Department",
             "Delete Role/Employee/Department",
+            "View Utilized Budget of a Department",
             "Exit"
         ],
         name: "trackopt"
@@ -326,10 +340,10 @@ function trackEmpl() {
                 showDep(console.log('DEPARTMENTS'));
                 break;
             case "View All Roles":
-                showRole();
+                showRole(console.log('ROLES'));
                 break;
             case"View All Employees":
-                showEmpl();
+                showEmpl(console.log('EMPLOYEES'));
                 break;
             case "Add a Department":
                 enterDep();
@@ -347,13 +361,16 @@ function trackEmpl() {
                 updEmplMgr();
                 break;
             case "View Employees by Manager":
-                showEmplMgr();
+                showEmplMgr(console.log('EMPLOYEES BY MANAGER'));
                 break;
             case "View Employees by Department":
-                showEmplDep();
+                showEmplDep(console.log('EMPLOYEES BY DEPARTMENT'));
                 break;
-            case "Delete Role/Employee/Department":
+            case "Delete Role/Department/Employee":
                 delRecord();
+                break;
+            case "View Utilized Budget of a Department":
+                showBudget(console.log('BUDGET BY DEPARTMENT'));
                 break;
             default:
                 db.end;
