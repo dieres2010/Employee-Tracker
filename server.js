@@ -133,6 +133,33 @@ const UpdRole = (employeeid, newrole) => {
     });
   };
 
+// Display all Employees Ordered by Department
+
+const showEmplDep = () => {
+    let sql = `SELECT d.id AS Departmen_id, d.name AS Department_name, e.id AS Employee, first_name, last_name, role_id AS role, r.title, r.salary, manager_id FROM employee AS e LEFT JOIN role AS r  ON e.role_id = r.id LEFT JOIN department AS d ON r.department_id = d.id ORDER BY d.id ASC;`;
+  
+    db.query(sql, (err, res) => {
+      if (err) throw err;
+      console.table("");
+      console.table(res);
+      trackEmpl();
+    });
+};
+
+// Display all Employees Ordered by Manager
+
+const showEmplMgr = () => {
+    let sql = `SELECT manager_id AS Manager, id AS Employee, first_name, last_name, role_id AS role FROM employee ORDER BY manager_id ASC;`;
+  
+    db.query(sql, (err, res) => {
+      if (err) throw err;
+      console.table("");
+      console.table(res);
+      trackEmpl();
+    });
+};
+
+
 function enterDep() {
     console.table(" ");
     inquirer.prompt([
@@ -242,6 +269,8 @@ function trackEmpl() {
             "Add an Employee",
             "Update an Employee Role",
             "Update Employee Manager",
+            "View Employees by Manager",
+            "View Employees by Department",
             "Exit"
         ],
         name: "trackopt"
@@ -274,6 +303,12 @@ function trackEmpl() {
                 break;
             case  "Update Employee Manager":
                 updEmplMgr();
+                break;
+            case "View Employees by Manager":
+                showEmplMgr();
+                break;
+            case "View Employees by Department":
+                showEmplDep();
                 break;
             default:
                 db.end;
