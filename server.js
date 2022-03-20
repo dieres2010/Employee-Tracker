@@ -12,9 +12,6 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-//Use apiRoutes
-//app.use('/api', apiRoutes);
-
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
@@ -30,7 +27,7 @@ db.connect(err => {
   });
 });
 
-// Display all Departments in the DataBase Departments Table
+// Display all Departments
 
 const showDep = () => {
     
@@ -44,7 +41,7 @@ const showDep = () => {
     });
 };
 
-// Display all Departments in the DataBase Departments Table
+// Display all Roles
 
 const showRole = () => {
     let sql = `SELECT title, role.id, department_id, department.name, salary FROM role LEFT OUTER JOIN department ON role.department_id = department.id`;
@@ -57,7 +54,7 @@ const showRole = () => {
     });
 };
 
-// Display all Departments in the DataBase Departments Table
+// Display all Employees
 
 const showEmpl = () => {
     let sql = `SELECT e.id, first_name, last_name, role_id AS role, r.title, r.salary, d.name AS department, manager_id FROM employee AS e LEFT JOIN role AS r  ON e.role_id = r.id LEFT JOIN department AS d ON r.department_id = d.id;`;
@@ -71,6 +68,7 @@ const showEmpl = () => {
 };
 
 // Add Department
+
 const addDep = (nameDep) => {
     let sql = `INSERT INTO department (name) VALUES ("`+ nameDep+`")`;
   
@@ -84,6 +82,7 @@ const addDep = (nameDep) => {
   };
 
 // Add Role
+
 const addRole = (rolename, rolesalary, roledept) => {
     let sql = `INSERT INTO role (title, salary, department_id) VALUES ("`+rolename+`",` +rolesalary+`,"`+ roledept+`")`;
   
@@ -97,9 +96,11 @@ const addRole = (rolename, rolesalary, roledept) => {
   };
 
 // Add Employee
+
 const addEmpl = (firstname, lastname, role, manager) => {
+    
     let sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("`+firstname+`","` +lastname+`","`+ role+`","`+ manager+`")`;
-  
+    
     db.query(sql, (err, res) => {
       if (err) throw err;
       console.log(" ");
@@ -108,6 +109,9 @@ const addEmpl = (firstname, lastname, role, manager) => {
       trackEmpl();
     });
   };
+
+
+// Update Employee Role
 
 const UpdRole = (employeeid, newrole) => {
     let sql = `UPDATE employee SET role_id = "`+newrole+`" WHERE id = "`+employeeid+`"`;
@@ -120,6 +124,8 @@ const UpdRole = (employeeid, newrole) => {
       trackEmpl();
     });
   };
+
+  // Update Employee Manager
 
   const UpdMgr = (employeeid, newmgr) => {
     let sql = `UPDATE employee SET manager_id = "`+newmgr+`" WHERE id = "`+employeeid+`"`;
@@ -188,6 +194,7 @@ const showEmplMgr = () => {
     });
 };
 
+// Enter New Department
 
 function enterDep() {
     console.table(" ");
@@ -202,6 +209,8 @@ function enterDep() {
     })
     
 };
+
+// Enter New Role
 
 function enterRole() {
     console.table(" ");
@@ -224,6 +233,9 @@ function enterRole() {
     })
     
 };
+
+// Enter New Employee
+
 function enterEmpl() {
     console.table(" ");
     inquirer.prompt([
@@ -249,6 +261,8 @@ function enterEmpl() {
     
 };
 
+// Enter Employee New Role
+
 function updEmplRole() {
     console.table(" ");
     inquirer.prompt([
@@ -265,6 +279,8 @@ function updEmplRole() {
     })
     
 };
+
+// Enter Employee New Manager
 
 function updEmplMgr() {
     console.table(" ");
@@ -283,7 +299,8 @@ function updEmplMgr() {
     
 };
 
-// Prompt members information
+// Prompt for Delete Options
+
 function delRecord() {
 
     inquirer.prompt([{
@@ -308,7 +325,8 @@ function delRecord() {
     };
         
 
-// Prompt members information
+// Prompt for Information
+
 function trackEmpl() {
 //    console.clear();
     inquirer.prompt([{
@@ -366,7 +384,7 @@ function trackEmpl() {
             case "View Employees by Department":
                 showEmplDep(console.log('EMPLOYEES BY DEPARTMENT'));
                 break;
-            case "Delete Role/Department/Employee":
+            case "Delete Role/Employee/Department":
                 delRecord();
                 break;
             case "View Utilized Budget of a Department":
@@ -379,7 +397,6 @@ function trackEmpl() {
         }
     });
 }
-
 
 // Start the App
 function initApp() {
