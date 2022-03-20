@@ -133,6 +133,22 @@ const UpdRole = (employeeid, newrole) => {
     });
   };
 
+  //Delete a record from Department or Role or Employee depending on option chosen
+
+  const delRec = (option, optid) => {
+
+    let sql = `DELETE FROM `+option+` WHERE id = "`+optid+`"`;
+      
+    db.query(sql, (err, res) => {
+      if (err) throw err;
+      console.log(" ");
+      console.log(option," id: ", optid, " deleted");
+      console.log(" ");
+      trackEmpl();
+    });
+  };
+
+
 // Display all Employees Ordered by Department
 
 const showEmplDep = () => {
@@ -255,6 +271,31 @@ function updEmplMgr() {
 };
 
 // Prompt members information
+function delRecord() {
+
+    inquirer.prompt([{
+            type: "list",
+            message: "Choose an Option:",
+            choices: [
+                "department",
+                "role",
+                "employee"
+            ],
+            name: "delopt"
+        },
+        {
+            message: "Enter the id (Department/Role/Employee) to Delete: ",
+            name: "delid"
+        }
+    ])  .then(function({delopt, delid}) {
+
+            delRec (delopt,delid);
+        })
+    
+    };
+        
+
+// Prompt members information
 function trackEmpl() {
 //    console.clear();
     inquirer.prompt([{
@@ -271,6 +312,7 @@ function trackEmpl() {
             "Update Employee Manager",
             "View Employees by Manager",
             "View Employees by Department",
+            "Delete Role/Employee/Department",
             "Exit"
         ],
         name: "trackopt"
@@ -309,6 +351,9 @@ function trackEmpl() {
                 break;
             case "View Employees by Department":
                 showEmplDep();
+                break;
+            case "Delete Role/Employee/Department":
+                delRecord();
                 break;
             default:
                 db.end;
