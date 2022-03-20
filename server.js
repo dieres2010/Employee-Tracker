@@ -40,6 +40,7 @@ const showDep = () => {
       if (err) throw err;
       console.table("");
       console.table(res);
+      trackEmpl();
     });
 };
 
@@ -52,6 +53,7 @@ const showRole = () => {
       if (err) throw err;
       console.table("");
       console.table(res);
+      trackEmpl();
     });
 };
 
@@ -64,6 +66,7 @@ const showEmpl = () => {
       if (err) throw err;
       console.table("");
       console.table(res);
+      trackEmpl();
     });
 };
 
@@ -73,8 +76,10 @@ const addDep = (nameDep) => {
   
     db.query(sql, (err, res) => {
       if (err) throw err;
-      console.table("");
-      console.table(res);
+      console.log(" ");
+      console.log("Department: ", nameDep, "Created" )
+      console.log(" ");
+      trackEmpl();
     });
   };
 
@@ -84,8 +89,10 @@ const addRole = (rolename, rolesalary, roledept) => {
   
     db.query(sql, (err, res) => {
       if (err) throw err;
-      console.table("");
-      console.table(res);
+      console.log(" ");
+      console.log("Role: ", rolename, " with Salary: ", rolesalary, " and Department: ", roledept, "Created" )
+      console.log(" ");
+      trackEmpl();
     });
   };
 
@@ -95,8 +102,10 @@ const addEmpl = (firstname, lastname, role, manager) => {
   
     db.query(sql, (err, res) => {
       if (err) throw err;
-      console.table("");
-      console.table(res);
+      console.log(" ");
+      console.log("Employee: ", firstname, " ", lastname," with role: ", role, " and Manager: ", manager, "Created" );
+      console.log(" ");
+      trackEmpl();
     });
   };
 
@@ -105,13 +114,15 @@ const UpdRole = (employeeid, newrole) => {
   
     db.query(sql, (err, res) => {
       if (err) throw err;
-      console.table("");
-      console.table(res);
+      console.log(" ");
+      console.log("Employee id: ", employeeid, " now have Role id: ", newrole );
+      console.log(" ");
+      trackEmpl();
     });
   };
 
 function enterDep() {
-    console.clear();
+    console.table(" ");
     inquirer.prompt([
         {
             message: "Enter the Department Name:",
@@ -125,7 +136,7 @@ function enterDep() {
 };
 
 function enterRole() {
-    console.clear();
+    console.table(" ");
     inquirer.prompt([
         {
             message: "Enter the Role Name:",
@@ -146,7 +157,7 @@ function enterRole() {
     
 };
 function enterEmpl() {
-    console.clear();
+    console.table(" ");
     inquirer.prompt([
         {
             message: "Enter the Employee First Name:",
@@ -171,7 +182,7 @@ function enterEmpl() {
 };
 
 function updEmplRole() {
-    console.clear();
+    console.table(" ");
     inquirer.prompt([
         {
             message: "Enter the Employee's Id:",
@@ -189,7 +200,7 @@ function updEmplRole() {
 
 // Prompt members information
 function trackEmpl() {
-    console.clear();
+//    console.clear();
     inquirer.prompt([{
         type: "list",
         message: "Choose an Option:",
@@ -208,7 +219,7 @@ function trackEmpl() {
 
     ])
     .then(function({trackopt}) {
-        console.clear();
+       // console.clear();
         switch (trackopt) {
             case "View All Departments":
                 showDep(console.log('DEPARTMENTS'));
@@ -236,7 +247,6 @@ function trackEmpl() {
                 process.exit(0);
 
         }
-        trackEmpl();
     });
 }
 
