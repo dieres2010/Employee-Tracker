@@ -121,6 +121,18 @@ const UpdRole = (employeeid, newrole) => {
     });
   };
 
+  const UpdMgr = (employeeid, newmgr) => {
+    let sql = `UPDATE employee SET manager_id = "`+newmgr+`" WHERE id = "`+employeeid+`"`;
+  
+    db.query(sql, (err, res) => {
+      if (err) throw err;
+      console.log(" ");
+      console.log("Employee id: ", employeeid, " now have Manager id: ", newmgr );
+      console.log(" ");
+      trackEmpl();
+    });
+  };
+
 function enterDep() {
     console.table(" ");
     inquirer.prompt([
@@ -198,6 +210,23 @@ function updEmplRole() {
     
 };
 
+function updEmplMgr() {
+    console.table(" ");
+    inquirer.prompt([
+        {
+            message: "Enter the Employee's Id:",
+            name: "employeeid"
+        },
+        {
+            message: "Enter the New Manager (id) for the Employee:",
+            name: "newmgr"
+        }
+    ])    .then(function({employeeid, newmgr}) {
+        UpdMgr(employeeid, newmgr);
+    })
+    
+};
+
 // Prompt members information
 function trackEmpl() {
 //    console.clear();
@@ -212,6 +241,7 @@ function trackEmpl() {
             "Add A Role",
             "Add an Employee",
             "Update an Employee Role",
+            "Update Employee Manager",
             "Exit"
         ],
         name: "trackopt"
@@ -241,6 +271,9 @@ function trackEmpl() {
                 break;
             case "Update an Employee Role":
                 updEmplRole();
+                break;
+            case  "Update Employee Manager":
+                updEmplMgr();
                 break;
             default:
                 db.end;
